@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from pathlib import Path
 from typing import List
 
@@ -14,3 +15,8 @@ def get_all_files_in_directory(path: Path) -> List[Path]:
         return list(path.rglob("*.*"))
 
     return [path]
+
+
+def prettify_date(date_str: str):
+    date = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S.%fZ")
+    return date.strftime("%Y-%m-%d %H:%M:%S")

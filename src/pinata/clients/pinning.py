@@ -19,7 +19,7 @@ class PinningClient(PinataClient):
 
         if file_path.is_dir():
             all_files = get_all_files_in_directory(file_path)
-            files = [("file",(file, open(file, "rb"))) for file in all_files]
+            files = [("file", (file, open(file, "rb"))) for file in all_files]
         else:
             files = [("file", open(file_path, "rb"))]
 

@@ -1,10 +1,9 @@
-from datetime import datetime
-
 import click
 
 from pinata.api_key import get_key_manager
 from pinata.exceptions import PinataException
 from pinata.sdk import Pinata
+from pinata.utils import prettify_date
 
 profile_option = click.option(
     "--profile",
@@ -88,7 +87,7 @@ def list_pins(status, profile):
     response = pinata.data.search_pins(status=status)
     pins = response["rows"]
     for pin in pins:
-        date = datetime.strptime(pin["date_pinned"], "%Y-%m-%dT%H:%M:%S.%fZ")
-        date_str = date.strftime('%Y-%m-%d %H:%M:%S')
-        row = f"CID (IPFS Pin Hash): {pin['ipfs_pin_hash']}, Pinned: {date_str}"
+        name = pin["metadata"].get("name", "<Unnamed>")
+        date_str = prettify_date(pin["date_pinned"])
+        row = f"Name: {name}, CID (IPFS Pin Hash): {pin['ipfs_pin_hash']}, Pinned: {date_str}"
         click.echo(row)
