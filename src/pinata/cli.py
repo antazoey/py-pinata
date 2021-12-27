@@ -50,24 +50,34 @@ def list_keys():
 @click.argument("profile_name")
 @click.option("--api-key", help="The API key.", prompt=True)
 @click.option("--api-secret", help="The API secret.", prompt=True)
-def _import(profile_name, api_key, api_secret):
+def import_key(profile_name, api_key, api_secret):
     """Import an existing API key pair."""
     key_manager = get_key_manager()
     key_manager.set_key_pair(profile_name, api_key, api_secret)
     click.echo(f"Successfully added API key profile {profile_name}")
 
 
-@keys.command()
+@keys.command("remove")
 @click.argument("profile_name")
-def remove(profile_name):
+def remove_key(profile_name):
     """Remove an API key pair profile."""
     key_manager = get_key_manager()
     key_manager.delete_key_pair(profile_name)
 
 
+@keys.command("rename")
+@click.option("--old-name", help="The name of the profile to change.", required=True)
+@click.option("--new-name", help="The new name of the profile.", required=True)
+def rename_key(old_name, new_name):
+    """Remove an API key pair profile."""
+    key_manager = get_key_manager()
+    key_manager.rename_key_pair(old_name, new_name)
+    click.echo(f"Successfully renamed API key profile '{old_name}' to '{new_name}'.")
+
+
 @cli.command()
 @click.option(
-    "--status", default="all", type=click.Choice(["all", "pinned", "unpinned"])
+    "--status", default="pinned", type=click.Choice(["all", "pinned", "unpinned"])
 )
 @profile_option
 def list_pins(status, profile):
@@ -75,7 +85,7 @@ def list_pins(status, profile):
     key_manager = get_key_manager()
     api_key, api_secret = key_manager.get_key_pair(profile)
     pinata = Pinata.from_api_key(api_key, api_secret)
-    response = pinata.data.search_pins(status="pinned")
+    response = pinata.data.search_pins(status=status)
     pins = response["rows"]
     for pin in pins:
         date = datetime.strptime(pin["date_pinned"], "%Y-%m-%dT%H:%M:%S.%fZ")

@@ -1,3 +1,4 @@
+import click
 import json
 from typing import Dict, List, Tuple
 
@@ -7,6 +8,21 @@ SERVICE_NAME = "pinata"
 PINATA_MGMT_KEY = "pinata-mgmt"
 PROFILES_KEY = "profiles"
 DEFAULT_KEY = "default"
+
+
+def set_keys_from_prompt(profile_name: str):
+    """
+    Create an API key profile from a ``click.prompt()``.
+    Useful for scripting the creating of profiles.
+
+    Args:
+        profile_name (str): The profile name to use.
+    """
+
+    api_key = click.prompt("Enter your Pinata API key")
+    api_secret = click.prompt("Enter your Pinata API key secret")
+    manager = get_key_manager()
+    manager.set_key_pair(profile_name, api_key, api_secret)
 
 
 def _set_mgmt_dict(new_mgmt_dict: Dict):
@@ -126,6 +142,18 @@ class KeyringManager:
             _add_profile_to_mgmt(profile_name, mgmt)
 
         return api_key, api_secret
+
+    def rename_key_pair(self, old_name: str, new_name: str):
+        """
+        Rename an API key profile.
+
+        Args:
+            old_name (str): The name of the profile to change.
+            new_name (str): The new name of the profile.
+        """
+        api_key, api_secret = self.get_key_pair(old_name)
+        self.set_key_pair(new_name, api_key, api_secret)
+        self.delete_key_pair(old_name)
 
 
 def get_key_manager():
