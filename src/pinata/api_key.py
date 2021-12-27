@@ -4,6 +4,8 @@ from typing import Dict, List, Tuple
 
 import keyring
 
+from pinata.exceptions import PinataMissingAPIKeyError
+
 SERVICE_NAME = "pinata"
 PINATA_MGMT_KEY = "pinata-mgmt"
 PROFILES_KEY = "profiles"
@@ -76,7 +78,8 @@ class KeyringManager:
             mgmt_dict[DEFAULT_KEY] = ""
 
         # If the default is missing and there is at least 1 profile, set it as default.
-        if mgmt_dict[DEFAULT_KEY] is None and len(mgmt_dict[PROFILES_KEY]):
+        needs_default = mgmt_dict[DEFAULT_KEY] is None or mgmt_dict[DEFAULT_KEY] not in mgmt_dict[PROFILES_KEY]
+        if len(mgmt_dict[PROFILES_KEY]) and needs_default:
             mgmt_dict[DEFAULT_KEY] = mgmt_dict[PROFILES_KEY][0]
 
         return mgmt_dict
@@ -136,6 +139,9 @@ class KeyringManager:
         api_key = _get_password(f"{profile_name}-api-key")
         api_secret = _get_password(f"{profile_name}-api-secret")
 
+        if not api_key or not api_secret:
+            raise PinataMissingAPIKeyError(profile_name)
+
         # Add the profile to MGMT JSON if it for some reason is missing.
         mgmt = dict(self.mgmt)
         if api_key and api_secret and profile_name not in mgmt.get(PROFILES_KEY, []):
@@ -154,6 +160,12 @@ class KeyringManager:
         api_key, api_secret = self.get_key_pair(old_name)
         self.set_key_pair(new_name, api_key, api_secret)
         self.delete_key_pair(old_name)
+
+        # Change the default if needed.
+        if self.default_profile_name == old_name:
+            mgmt = dict(mgmt)
+            mgmt[DEFAULT_KEY] = new_name
+            _set_mgmt_dict(mgmt)
 
 
 def get_key_manager():

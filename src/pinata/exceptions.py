@@ -9,6 +9,14 @@ class PinataException(Exception):
     """
 
 
+class PinataMissingAPIKeyError(PinataException):
+    """
+    Raised when an API key or secret is suddenly missing.
+    """
+    def __init__(self, profile_name: str):
+        super().__init__(f"API key or secret for profile '{profile_name}' is missing.")
+
+
 class PinataResponseKeyError(KeyError, PinataException):
     """
     An error raised when trying to access the wrong key from a response.

@@ -2,6 +2,7 @@ from pathlib import Path
 
 from pinata.clients.base import PinataClient
 from pinata.response import PinataResponse
+from pinata.utils import get_all_files_in_directory
 
 
 class PinningClient(PinataClient):
@@ -15,7 +16,14 @@ class PinningClient(PinataClient):
         Returns:
             :class:`~pinata.response.PinataResponse`
         """
-        return self.session.get()
+
+        if file_path.is_dir():
+            all_files = get_all_files_in_directory(file_path)
+            files = [("file",(file, open(file, "rb"))) for file in all_files]
+        else:
+            files = [("file", open(file_path, "rb"))]
+
+        return self.session.post("pinning/pinFileToIPFS", files=files)
 
     def pin_json(self, json_file_path: Path) -> PinataResponse:
         """

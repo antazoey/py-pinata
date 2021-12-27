@@ -1,7 +1,10 @@
+from pathlib import Path
+
 from pinata.clients.data import DataClient
 from pinata.clients.pinning import PinningClient
 from pinata.session import PinataAPISession
 from pinata.api_key import get_key_manager
+from pinata.response import PinataResponse
 
 
 class Pinata:
@@ -35,3 +38,30 @@ class Pinata:
         pinning_client = PinningClient(session)
         data_client = DataClient(session)
         return cls(pinning_client, data_client)
+
+    def pin_file(self, file_path: Path) -> PinataResponse:
+        """
+        Add and pin any file, or directory, to Pinata's IPFS nodes.
+
+        Args:
+            file_path (pathlib.Path): The path to the file to pin.
+
+        Returns:
+            :class:`~pinata.response.PinataResponse`
+        """
+
+        return self.pinning.pin_file(file_path)
+
+    def pin_json(self, json_file_path: Path) -> PinataResponse:
+        """
+        Add and pin any JSON object they wish to Pinata's IPFS nodes. This endpoint is
+        specifically optimized to only handle JSON content.
+
+        Args:
+            json_file_path (pathlib.Path): The path to a JSON file.
+
+        Returns:
+            :class:`~pinata.response.PinataResponse`
+        """
+
+        return self.pinning.pin_json(json_file_path)
