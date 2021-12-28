@@ -53,5 +53,18 @@ class PinningClient(PinataClient):
         """
         return self.session.get()
 
+    def unpin(self, content_hash: str) -> PinataResponse:
+        """
+        Unpin content they previously uploaded to Pinata's IPFS nodes.
+
+        Args:
+            content_hash (str): The hash of the content to stop pinning.
+
+        Returns:
+            :class:`~pinata.response.PinataResponse`
+        """
+        url = f"/pinning/unpin/{content_hash}"
+        return self.session.delete(url)
+
 
 __all__ = ["PinningClient"]

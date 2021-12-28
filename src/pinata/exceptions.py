@@ -80,6 +80,14 @@ class PinataInternalServiceError(PinataHTTPError):
     """
 
 
+class NoContentError(PinataException):
+    """
+    An error raised when trying to unpin content that does not exist.
+    """
+    def __init__(self, content_hash: str):
+        super().__init__(f"No pinned content found with hash '{content_hash}'.")
+
+
 def raise_pinata_http_error(raised_error: HTTPError):
     """
     Raise the appropriate :class:`pinata.exceptions.PinataHTTPError` based on the given

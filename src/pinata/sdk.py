@@ -3,6 +3,8 @@ from pathlib import Path
 from pinata.api_key import get_key_manager
 from pinata.clients.data import DataClient
 from pinata.clients.pinning import PinningClient
+from pinata.exceptions import PinataInternalServiceError, NoContentError
+from pinata.logger import logger
 from pinata.response import PinataResponse
 from pinata.session import PinataAPISession
 
@@ -65,3 +67,18 @@ class Pinata:
         """
 
         return self.pinning.pin_json(json_file_path)
+
+    def unpin(self, content_hash: str) -> PinataResponse:
+        """
+        Unpin content they previously uploaded to Pinata's IPFS nodes.
+
+        Args:
+            content_hash (str): The hash of the content to stop pinning.
+
+        Returns:
+            :class:`~pinata.response.PinataResponse`
+        """
+        try:
+            return self.pinning.unpin(content_hash)
+        except PinataInternalServiceError as err:
+            raise NoContentError(content_hash) from err

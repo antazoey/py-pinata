@@ -45,6 +45,12 @@ def list_keys():
         click.echo(name)
 
 
+def _get_pinata(profile: str) -> Pinata:
+    key_manager = get_key_manager()
+    api_key, api_secret = key_manager.get_key_pair(profile)
+    return Pinata.from_api_key(api_key, api_secret)
+
+
 @keys.command("import")
 @click.argument("profile_name")
 @click.option("--api-key", help="The API key.", prompt=True)
@@ -81,9 +87,7 @@ def rename_key(old_name, new_name):
 @profile_option
 def list_pins(status, profile):
     """List pins."""
-    key_manager = get_key_manager()
-    api_key, api_secret = key_manager.get_key_pair(profile)
-    pinata = Pinata.from_api_key(api_key, api_secret)
+    pinata = _get_pinata(profile)
     response = pinata.data.search_pins(status=status)
     pins = response["rows"]
     for pin in pins:
@@ -91,3 +95,13 @@ def list_pins(status, profile):
         date_str = prettify_date(pin["date_pinned"])
         row = f"Name: {name}, CID (IPFS Pin Hash): {pin['ipfs_pin_hash']}, Pinned: {date_str}"
         click.echo(row)
+
+
+@cli.command()
+@click.argument("content_hash")
+@profile_option
+def unpin(content_hash, profile):
+    pinata = _get_pinata(profile)
+    pinata.unpin(content_hash)
+    click.echo(f"Successfully unpinned content.")
+
