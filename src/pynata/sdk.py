@@ -6,7 +6,12 @@ from nft_utils import Pin, PinningAPI
 from pynata.api_key import get_key_manager
 from pynata.clients.data import DataClient
 from pynata.clients.pinning import PinningClient
-from pynata.exceptions import NoContentError, PinataInternalServiceError
+from pynata.exceptions import (
+    NoContentError,
+    PinataBadRequestError,
+    PinataInternalServiceError,
+    PinError,
+)
 from pynata.session import PinataAPISession
 
 
@@ -69,11 +74,15 @@ class Pinata(PinningAPI):
         """
 
         is_json = file_path.suffix == ".json"
-        response = (
-            self.pinning.pin_json(file_path)
-            if is_json
-            else self.pinning.pin_file(file_path)
-        )
+        try:
+            response = (
+                self.pinning.pin_json(file_path)
+                if is_json
+                else self.pinning.pin_file(file_path)
+            )
+        except PinataBadRequestError as err:
+            raise PinError(file_path) from err
+
         return response.data["IpfsHash"]
 
     def unpin(self, content_hash: str):

@@ -2,7 +2,6 @@ from pathlib import Path
 
 from pynata.clients.base import PinataClient
 from pynata.response import PinataResponse
-from pynata.utils import get_all_files_in_directory
 
 
 class PinningClient(PinataClient):
@@ -16,13 +15,12 @@ class PinningClient(PinataClient):
         Returns:
             :class:`~pynata.response.PinataResponse`
         """
-
-        if file_path.is_dir():
-            all_files = get_all_files_in_directory(file_path)
-            files = [("file", (file, open(file, "rb"))) for file in all_files]
-        else:
-            files = [("file", open(file_path, "rb"))]
-
+        paths = [f for f in file_path.iterdir()] if file_path.is_dir() else [file_path]
+        files = (
+            [("file", (str(path), open(path, "rb"))) for path in paths]
+            if file_path.is_dir()
+            else [("file", open(path, "rb")) for path in paths]
+        )
         return self.session.post("pinning/pinFileToIPFS", files=files)
 
     def pin_json(self, json_file_path: Path) -> PinataResponse:
@@ -36,7 +34,7 @@ class PinningClient(PinataClient):
         Returns:
             :class:`~pynata.response.PinataResponse`
         """
-        return self.session.get()
+        raise NotImplemented("TODO")
 
     def pin_hash(self, hash_: str) -> PinataResponse:
         """
@@ -51,7 +49,7 @@ class PinningClient(PinataClient):
         Returns:
             :class:`~pynata.response.PinataResponse`
         """
-        return self.session.get()
+        raise NotImplemented("TODO")
 
     def unpin(self, content_hash: str) -> PinataResponse:
         """

@@ -18,6 +18,15 @@ class PinataMissingAPIKeyError(PinataException):
         super().__init__(f"API key or secret for profile '{profile_name}' is missing.")
 
 
+class PinError(PinataException):
+    """
+    Raised when unable to pin a file.
+    """
+
+    def __init__(self, file_name: str):
+        super().__init__(f"Unable to pin file '{file_name}'.")
+
+
 class PinataResponseKeyError(KeyError, PinataException):
     """
     An error raised when trying to access the wrong key from a response.
