@@ -1,9 +1,9 @@
 import click
 
-from pinata.api_key import get_key_manager
-from pinata.exceptions import PinataException
-from pinata.sdk import Pinata
-from pinata.utils import prettify_date
+from pynata.api_key import get_key_manager
+from pynata.exceptions import PinataException
+from pynata.sdk import Pinata
+from pynata.utils import prettify_date
 
 profile_option = click.option(
     "--profile",

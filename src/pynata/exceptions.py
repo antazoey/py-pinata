@@ -5,7 +5,7 @@ from requests.exceptions import HTTPError
 
 class PinataException(Exception):
     """
-    A base-exceptions class in 'py-pinata'.
+    A base-exceptions class in 'py-pynata'.
     """
 
 
@@ -91,7 +91,7 @@ class NoContentError(PinataException):
 
 def raise_pinata_http_error(raised_error: HTTPError):
     """
-    Raise the appropriate :class:`pinata.exceptions.PinataHTTPError` based on the given
+    Raise the appropriate :class:`pynata.exceptions.PinataHTTPError` based on the given
     HTTPError's response status code.
     """
     if raised_error.response.status_code == 400:

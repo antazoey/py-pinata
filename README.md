@@ -9,15 +9,15 @@ One way to initialize the SDK is by saving and using your API key and secret usi
 
 ```python
 import keyring
-from pinata import Pinata
+from pynata import Pinata
 
 # Save your API key + secret in 'keyring'.
-keyring.set_password("pinata", "api-key", "MY_API_KEY")
-keyring.set_password("pinata", "api-secret", "MY_API_SECRET")
+keyring.set_password("pynata", "api-key", "MY_API_KEY")
+keyring.set_password("pynata", "api-secret", "MY_API_SECRET")
 
 # Access your secrets when initializing the Pinata SDK.
-api_key = keyring.get_password("pinata", "api-key")
-api_secret = keyring.get_password("pinata", "api-secret")
+api_key = keyring.get_password("pynata", "api-key")
+api_secret = keyring.get_password("pynata", "api-secret")
 
 # Use the classmethod 'from_api_key()' to create an instance of Pinata.
 sdk = Pinata.from_api_key(api_key, api_secret)

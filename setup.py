@@ -6,14 +6,14 @@ from setuptools import find_packages, setup
 here = path.abspath(path.dirname(__file__))
 
 about = {}
-with open(path.join(here, "src", "pinata", "__version__.py"), encoding="utf8") as fh:
+with open(path.join(here, "src", "pynata", "__version__.py"), encoding="utf8") as fh:
     exec(fh.read(), about)
 
 with open(path.join(here, "README.md"), "r", "utf-8") as f:
     readme = f.read()
 
 setup(
-    name="pinata",
+    name="pynata",
     version=about["__version__"],
     url="https://github.com/unparalleled-js/py-pinata",
     project_urls={
@@ -29,7 +29,12 @@ setup(
     include_package_data=True,
     zip_safe=False,
     python_requires=">=3.7, <4",
-    install_requires=["click>=8.0.3,<9.0", "keyring>=21.8.0,<22.0", "requests>=2.4.2"],
+    install_requires=[
+        "click>=8.0.3,<9.0",
+        "keyring>=21.8.0,<22.0",
+        "nft-utils==0.1.0",
+        "requests>=2.4.2",
+    ],
     extras_require={
         "dev": [
             "flake8==3.9.2",
@@ -39,7 +44,7 @@ setup(
             "tox==3.24.0",
         ]
     },
-    entry_points={"console_scripts": ["pinata=pinata.cli:cli"]},
+    entry_points={"console_scripts": ["pynata=pynata.cli:cli"]},
     classifiers=[
         "Intended Audience :: Developers",
         "Natural Language :: English",

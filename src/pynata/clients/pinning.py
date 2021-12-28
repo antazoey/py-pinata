@@ -1,8 +1,8 @@
 from pathlib import Path
 
-from pinata.clients.base import PinataClient
-from pinata.response import PinataResponse
-from pinata.utils import get_all_files_in_directory
+from pynata.clients.base import PinataClient
+from pynata.response import PinataResponse
+from pynata.utils import get_all_files_in_directory
 
 
 class PinningClient(PinataClient):
@@ -14,7 +14,7 @@ class PinningClient(PinataClient):
             file_path (pathlib.Path): The path to the file to pin.
 
         Returns:
-            :class:`~pinata.response.PinataResponse`
+            :class:`~pynata.response.PinataResponse`
         """
 
         if file_path.is_dir():
@@ -34,7 +34,7 @@ class PinningClient(PinataClient):
             json_file_path (pathlib.Path): The path to a JSON file.
 
         Returns:
-            :class:`~pinata.response.PinataResponse`
+            :class:`~pynata.response.PinataResponse`
         """
         return self.session.get()
 
@@ -49,7 +49,7 @@ class PinningClient(PinataClient):
             hash_: The hash to pin.
 
         Returns:
-            :class:`~pinata.response.PinataResponse`
+            :class:`~pynata.response.PinataResponse`
         """
         return self.session.get()
 
@@ -61,7 +61,7 @@ class PinningClient(PinataClient):
             content_hash (str): The hash of the content to stop pinning.
 
         Returns:
-            :class:`~pinata.response.PinataResponse`
+            :class:`~pynata.response.PinataResponse`
         """
         url = f"/pinning/unpin/{content_hash}"
         return self.session.delete(url)

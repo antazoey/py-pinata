@@ -1,7 +1,7 @@
 from typing import Optional
 
-from pinata.clients.base import PinataClient
-from pinata.response import PinataResponse
+from pynata.clients.base import PinataClient
+from pynata.response import PinataResponse
 
 
 class DataClient(PinataClient):
@@ -37,10 +37,10 @@ class DataClient(PinataClient):
             status (str): Pass in ``"all"`` for both pinned and unpinned records. Pass in
               ``"pinned"`` for just pinned records (hashes that are currently pinned). Pass
               in ``"unpinned"`` for just unpinned records (previous hashes that are no longer
-              being pinned on pinata).
+              being pinned on pynata).
 
         Returns:
-            :class:`~pinata.response.PinataResponse`
+            :class:`~pynata.response.PinataResponse`
         """
         params = {
             "hashContains": hash_contains,

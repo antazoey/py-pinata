@@ -4,10 +4,10 @@ from typing import Dict, List, Tuple
 import click
 import keyring
 
-from pinata.exceptions import PinataMissingAPIKeyError
+from pynata.exceptions import PinataMissingAPIKeyError
 
-SERVICE_NAME = "pinata"
-PINATA_MGMT_KEY = "pinata-mgmt"
+SERVICE_NAME = "pynata"
+PINATA_MGMT_KEY = "pynata-mgmt"
 PROFILES_KEY = "profiles"
 DEFAULT_KEY = "default"
 
@@ -175,4 +175,4 @@ def get_key_manager():
     return KeyringManager()
 
 
-__all__ = ["get_key_manager"]
+__all__ = ["get_key_manager", "set_keys_from_prompt"]

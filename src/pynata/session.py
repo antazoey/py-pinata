@@ -3,11 +3,11 @@ from urllib.parse import urljoin, urlparse
 from requests import HTTPError
 from requests.sessions import HTTPAdapter, Request, Session
 
-from pinata.auth import PinataAuth
-from pinata.exceptions import MissingResponseError, raise_pinata_http_error
-from pinata.logger import logger
-from pinata.response import PinataResponse
-from pinata.utils import format_dict
+from pynata.auth import PinataAuth
+from pynata.exceptions import MissingResponseError, raise_pinata_http_error
+from pynata.logger import logger
+from pynata.response import PinataResponse
+from pynata.utils import format_dict
 
 
 class PinataAPISession:
@@ -167,7 +167,7 @@ class PinataAPISession:
 
 
 def _create_user_headers(headers):
-    user_headers = {"User-Agent": "py-pinata"}
+    user_headers = {"User-Agent": "py-pynata"}
     if headers:
         user_headers.update(headers)
 

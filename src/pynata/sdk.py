@@ -1,15 +1,16 @@
 from pathlib import Path
+from typing import List, Optional
 
-from pinata.api_key import get_key_manager
-from pinata.clients.data import DataClient
-from pinata.clients.pinning import PinningClient
-from pinata.exceptions import NoContentError, PinataInternalServiceError
-from pinata.logger import logger
-from pinata.response import PinataResponse
-from pinata.session import PinataAPISession
+from nft_utils import PinningAPI, Pin
+
+from pynata.api_key import get_key_manager
+from pynata.clients.data import DataClient
+from pynata.clients.pinning import PinningClient
+from pynata.exceptions import NoContentError, PinataInternalServiceError
+from pynata.session import PinataAPISession
 
 
-class Pinata:
+class Pinata(PinningAPI):
     def __init__(self, pinning_client: PinningClient, data_client: DataClient):
         self.pinning = pinning_client
         self.data = data_client
@@ -41,7 +42,22 @@ class Pinata:
         data_client = DataClient(session)
         return cls(pinning_client, data_client)
 
-    def pin_file(self, file_path: Path) -> PinataResponse:
+    def get_pins(self) -> List[Pin]:
+        pins = self.data.search_pins(status="pinned")["rows"]
+        return [
+            Pin(content_hash=p["ipfs_pin_hash"], file_name=p["metadata"]["name"])
+            for p in pins
+        ]
+
+    def get_hash(self, artwork_name: str) -> Optional[str]:
+        pins = self.get_pins()
+        for pin in pins:
+            if pin.file_name == artwork_name:
+                return pin.content_hash
+
+        return None
+
+    def pin_file(self, file_path: Path) -> str:
         """
         Add and pin any file, or directory, to Pinata's IPFS nodes.
 
@@ -49,26 +65,18 @@ class Pinata:
             file_path (pathlib.Path): The path to the file to pin.
 
         Returns:
-            :class:`~pinata.response.PinataResponse`
+            :class:`~pynata.response.PinataResponse`
         """
 
-        return self.pinning.pin_file(file_path)
+        is_json = file_path.suffix == ".json"
+        response = (
+            self.pinning.pin_json(file_path)
+            if is_json
+            else self.pinning.pin_file(file_path)
+        )
+        return response.data["IpfsHash"]
 
-    def pin_json(self, json_file_path: Path) -> PinataResponse:
-        """
-        Add and pin any JSON object they wish to Pinata's IPFS nodes. This endpoint is
-        specifically optimized to only handle JSON content.
-
-        Args:
-            json_file_path (pathlib.Path): The path to a JSON file.
-
-        Returns:
-            :class:`~pinata.response.PinataResponse`
-        """
-
-        return self.pinning.pin_json(json_file_path)
-
-    def unpin(self, content_hash: str) -> PinataResponse:
+    def unpin(self, content_hash: str):
         """
         Unpin content they previously uploaded to Pinata's IPFS nodes.
 
@@ -76,9 +84,9 @@ class Pinata:
             content_hash (str): The hash of the content to stop pinning.
 
         Returns:
-            :class:`~pinata.response.PinataResponse`
+            :class:`~pynata.response.PinataResponse`
         """
         try:
-            return self.pinning.unpin(content_hash)
+            self.pinning.unpin(content_hash)
         except PinataInternalServiceError as err:
             raise NoContentError(content_hash) from err

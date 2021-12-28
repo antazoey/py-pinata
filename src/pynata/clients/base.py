@@ -1,4 +1,4 @@
-from pinata.session import PinataAPISession
+from pynata.session import PinataAPISession
 
 
 class PinataClient:

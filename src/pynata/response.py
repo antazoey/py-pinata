@@ -1,6 +1,6 @@
 import json
 
-from pinata.exceptions import PinataResponseKeyError
+from pynata.exceptions import PinataResponseKeyError
 
 
 class PinataResponse:
