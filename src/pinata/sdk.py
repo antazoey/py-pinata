@@ -3,7 +3,7 @@ from pathlib import Path
 from pinata.api_key import get_key_manager
 from pinata.clients.data import DataClient
 from pinata.clients.pinning import PinningClient
-from pinata.exceptions import PinataInternalServiceError, NoContentError
+from pinata.exceptions import NoContentError, PinataInternalServiceError
 from pinata.logger import logger
 from pinata.response import PinataResponse
 from pinata.session import PinataAPISession

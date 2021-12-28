@@ -104,4 +104,3 @@ def unpin(content_hash, profile):
     pinata = _get_pinata(profile)
     pinata.unpin(content_hash)
     click.echo(f"Successfully unpinned content.")
-
