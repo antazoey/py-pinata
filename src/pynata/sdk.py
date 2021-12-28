@@ -85,12 +85,13 @@ class Pinata(PinningAPI):
 
         return response.data["IpfsHash"]
 
-    def unpin(self, content_hash: str):
+    def unpin(self, content_hash: str, ignore_errors: bool = False):
         """
         Unpin content they previously uploaded to Pinata's IPFS nodes.
 
         Args:
             content_hash (str): The hash of the content to stop pinning.
+            ignore_errors (bool): Ignore known errors.
 
         Returns:
             :class:`~pynata.response.PinataResponse`
@@ -98,4 +99,7 @@ class Pinata(PinningAPI):
         try:
             self.pinning.unpin(content_hash)
         except PinataInternalServiceError as err:
+            if ignore_errors:
+                return
+
             raise NoContentError(content_hash) from err
