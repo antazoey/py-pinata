@@ -1,3 +1,5 @@
+import sys
+
 import click
 
 from pynata.api_key import get_key_manager
@@ -5,12 +7,14 @@ from pynata.exceptions import PinataException
 from pynata.sdk import Pinata
 from pynata.utils import prettify_date
 
-profile_option = click.option(
-    "--profile",
-    "-p",
-    help="The profile to use",
-    default=get_key_manager().default_profile_name,
-)
+
+def profile_option():
+    return click.option(
+        "--profile",
+        "-p",
+        help="The profile to use",
+        default=get_key_manager().default_profile_name,
+    )
 
 
 class ExceptionHandlingGroup(click.Group):
@@ -39,7 +43,7 @@ def list_keys():
     profile_names = key_manager.profile_names
 
     if not profile_names:
-        click.echo("There are no stored API keys.")
+        _echo_no_profile()
 
     for name in profile_names:
         click.echo(name)
@@ -84,9 +88,13 @@ def rename_key(old_name, new_name):
 @click.option(
     "--status", default="pinned", type=click.Choice(["all", "pinned", "unpinned"])
 )
-@profile_option
+@profile_option()
 def list_pins(status, profile):
     """List pins."""
+    if not profile:
+        _echo_no_profile()
+        sys.exit(1)
+
     pinata = _get_pinata(profile)
     response = pinata.data.search_pins(status=status)
     pins = response["rows"]
@@ -99,8 +107,13 @@ def list_pins(status, profile):
 
 @cli.command()
 @click.argument("content_hash")
-@profile_option
+@profile_option()
 def unpin(content_hash, profile):
+    """Remove a pin."""
     pinata = _get_pinata(profile)
     pinata.unpin(content_hash)
     click.echo(f"Successfully unpinned content.")
+
+
+def _echo_no_profile():
+    click.echo("There are no stored API keys.")

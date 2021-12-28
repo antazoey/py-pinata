@@ -44,7 +44,7 @@ setup(
             "tox==3.24.0",
         ]
     },
-    entry_points={"console_scripts": ["pynata=pynata.cli:cli"]},
+    entry_points={"console_scripts": ["pinata=pynata.cli:cli"]},
     classifiers=[
         "Intended Audience :: Developers",
         "Natural Language :: English",

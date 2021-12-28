@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import List, Optional
 
-from nft_utils import PinningAPI, Pin
+from nft_utils import Pin, PinningAPI
 
 from pynata.api_key import get_key_manager
 from pynata.clients.data import DataClient

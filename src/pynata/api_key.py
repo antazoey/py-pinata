@@ -6,8 +6,8 @@ import keyring
 
 from pynata.exceptions import PinataMissingAPIKeyError
 
-SERVICE_NAME = "pynata"
-PINATA_MGMT_KEY = "pynata-mgmt"
+SERVICE_NAME = "pinata"
+PINATA_MGMT_KEY = "pinata-mgmt"
 PROFILES_KEY = "profiles"
 DEFAULT_KEY = "default"
 
@@ -93,7 +93,8 @@ class KeyringManager:
 
     @property
     def default_profile_name(self) -> str:
-        return self.mgmt[DEFAULT_KEY] or ""
+        default_name = self.mgmt[DEFAULT_KEY] or ""
+        return default_name
 
     def set_key_pair(self, profile_name: str, api_key: str, api_key_secret: str):
         """
@@ -166,7 +167,7 @@ class KeyringManager:
 
         # Change the default if needed.
         if self.default_profile_name == old_name:
-            mgmt = dict(mgmt)
+            mgmt = dict(self.mgmt)
             mgmt[DEFAULT_KEY] = new_name
             _set_mgmt_dict(mgmt)
 

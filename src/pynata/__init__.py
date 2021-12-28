@@ -1,5 +1,6 @@
-from pynata.sdk import Pinata
 from pynata.api_key import set_keys_from_prompt
+from pynata.exceptions import PinataMissingAPIKeyError
+from pynata.sdk import Pinata
 
 
 def create_pinata(profile_name: str) -> Pinata:
@@ -17,7 +18,12 @@ def create_pinata(profile_name: str) -> Pinata:
         :class:`~pynata.sdk.Pinata`
     """
 
-    pinata = Pinata.from_profile_name(profile_name)
+    try:
+        pinata = Pinata.from_profile_name(profile_name)
+    except PinataMissingAPIKeyError:
+        set_keys_from_prompt(profile_name)
+        pinata = Pinata.from_profile_name(profile_name)
+
     if not pinata:
         set_keys_from_prompt(profile_name)
 
