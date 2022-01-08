@@ -1,4 +1,5 @@
 import sys
+from pathlib import Path
 
 import click
 
@@ -106,7 +107,7 @@ def list_pins(status, profile):
 
 
 @cli.command()
-@click.argument("file_path")
+@click.argument("file_path", type=Path)
 @profile_option()
 def pin(file_path, profile):
     """Pin a new file."""

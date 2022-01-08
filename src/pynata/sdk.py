@@ -6,8 +6,12 @@ from nft_utils import Pin, PinningAPI
 from pynata.api_key import get_key_manager
 from pynata.clients.data import DataClient
 from pynata.clients.pinning import PinningClient
-from pynata.exceptions import (NoContentError, PinataBadRequestError,
-                               PinataInternalServiceError, PinError)
+from pynata.exceptions import (
+    NoContentError,
+    PinataBadRequestError,
+    PinataInternalServiceError,
+    PinError,
+)
 from pynata.session import PinataAPISession
 
 

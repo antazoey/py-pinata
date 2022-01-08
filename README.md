@@ -54,3 +54,9 @@ Pin new files to IPFS:
 ```python
 ipfs_hash = pinata.pin_file("path/to/file")
 ```
+
+you can also use the CLI:
+
+```bash
+pinata pin path/to/file
+```
