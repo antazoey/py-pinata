@@ -79,8 +79,7 @@ class KeyringManager:
 
         # If the default is missing and there is at least 1 profile, set it as default.
         needs_default = (
-            mgmt_dict[DEFAULT_KEY] is None
-            or mgmt_dict[DEFAULT_KEY] not in mgmt_dict[PROFILES_KEY]
+            mgmt_dict[DEFAULT_KEY] is None or mgmt_dict[DEFAULT_KEY] not in mgmt_dict[PROFILES_KEY]
         )
         if len(mgmt_dict[PROFILES_KEY]) and needs_default:
             mgmt_dict[DEFAULT_KEY] = mgmt_dict[PROFILES_KEY][0]

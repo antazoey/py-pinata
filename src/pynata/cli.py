@@ -86,9 +86,7 @@ def rename_key(old_name, new_name):
 
 
 @cli.command()
-@click.option(
-    "--status", default="pinned", type=click.Choice(["all", "pinned", "unpinned"])
-)
+@click.option("--status", default="pinned", type=click.Choice(["all", "pinned", "unpinned"]))
 @profile_option()
 def list_pins(status, profile):
     """List pins."""

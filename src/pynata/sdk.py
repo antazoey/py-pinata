@@ -49,10 +49,7 @@ class Pinata(PinningAPI):
 
     def get_pins(self) -> List[Pin]:
         pins = self.data.search_pins(status="pinned")["rows"]
-        return [
-            Pin(content_hash=p["ipfs_pin_hash"], file_name=p["metadata"]["name"])
-            for p in pins
-        ]
+        return [Pin(content_hash=p["ipfs_pin_hash"], file_name=p["metadata"]["name"]) for p in pins]
 
     def get_hash(self, artwork_name: str) -> Optional[str]:
         pins = self.get_pins()
@@ -76,9 +73,7 @@ class Pinata(PinningAPI):
         is_json = file_path.suffix == ".json"
         try:
             response = (
-                self.pinning.pin_json(file_path)
-                if is_json
-                else self.pinning.pin_file(file_path)
+                self.pinning.pin_json(file_path) if is_json else self.pinning.pin_file(file_path)
             )
         except PinataBadRequestError as err:
             raise PinError(file_path) from err
