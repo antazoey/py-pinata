@@ -23,34 +23,6 @@ class PinningClient(PinataClient):
         )
         return self.session.post("pinning/pinFileToIPFS", files=files)
 
-    def pin_json(self, json_file_path: Path) -> PinataResponse:
-        """
-        Add and pin any JSON object they wish to Pinata's IPFS nodes. This endpoint is
-        specifically optimized to only handle JSON content.
-
-        Args:
-            json_file_path (pathlib.Path): The path to a JSON file.
-
-        Returns:
-            :class:`~pynata.response.PinataResponse`
-        """
-        raise NotImplemented("TODO")
-
-    def pin_hash(self, hash_: str) -> PinataResponse:
-        """
-        Add a hash to Pinata for asynchronous pinning. Content added through this endpoint
-        is pinned in the background and will show up in your pinned items once the content
-        has been found/pinned. **For this operation to succeed, the content for the hash you
-        provide must already be pinned by another node on the IPFS network.**
-
-        Args:
-            hash_: The hash to pin.
-
-        Returns:
-            :class:`~pynata.response.PinataResponse`
-        """
-        raise NotImplemented("TODO")
-
     def unpin(self, content_hash: str) -> PinataResponse:
         """
         Unpin content they previously uploaded to Pinata's IPFS nodes.

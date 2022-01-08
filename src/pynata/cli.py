@@ -106,13 +106,23 @@ def list_pins(status, profile):
 
 
 @cli.command()
+@click.argument("file_path")
+@profile_option()
+def pin(file_path, profile):
+    """Pin a new file."""
+    pinata = _get_pinata(profile)
+    cid = pinata.pin_file(file_path)
+    click.echo(f"Successfully unpinned content. CID={cid}")
+
+
+@cli.command()
 @click.argument("content_hash")
 @profile_option()
 def unpin(content_hash, profile):
     """Remove a pin."""
     pinata = _get_pinata(profile)
     pinata.unpin(content_hash)
-    click.echo(f"Successfully unpinned content.")
+    click.echo("Successfully unpinned content.")
 
 
 def _echo_no_profile():

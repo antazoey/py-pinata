@@ -1,0 +1,22 @@
+[tool.mypy]
+exclude = "build/"
+
+[tool.black]
+line-length = 100
+target-version = ['py37', 'py38', 'py39']
+include = '\.pyi?$'
+
+[tool.pytest.ini_options]
+addopts = "-p no:ape_test"
+python_files = "test_*.py"
+testpaths = "tests"
+
+[tool.isort]
+line_length = 100
+force_grid_wrap = 0
+force_grid_wrap = 0
+include_trailing_comma = true
+known_third_party = ["click", "keyring", "nft_utils", "requests"]
+known_first_party = ["ape", "ape_accounts", "ape_console", "ape_ethereum", "ape_geth", "ape_plugins", "ape_test"]
+multi_line_output = 3
+use_parentheses = true
