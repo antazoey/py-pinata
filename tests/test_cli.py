@@ -1,3 +1,5 @@
+from pynata.utils import prettify_date
+
 from .conftest import (
     MOCK_FILE_NAME_1,
     MOCK_FILE_NAME_2,
@@ -6,8 +8,6 @@ from .conftest import (
     MOCK_PIN_HASH_1,
     MOCK_PIN_HASH_2,
 )
-
-from pynata.utils import prettify_date
 
 
 def test_list_pins(runner, root_cli, mock_data_client, pins_data):

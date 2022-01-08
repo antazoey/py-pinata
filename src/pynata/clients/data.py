@@ -2,9 +2,13 @@ from typing import Optional
 
 from pynata.clients.base import PinataClient
 from pynata.response import PinataResponse
+from pynata.session import PinataAPISession
 
 
 class DataClient(PinataClient):
+    def __init__(self, session: PinataAPISession):
+        super().__init__(session, "data")
+
     def search_pins(
         self,
         hash_contains: Optional[str] = None,
@@ -53,7 +57,7 @@ class DataClient(PinataClient):
             "status": status,
         }
         params = {k: v for k, v in params.items() if v is not None}
-        return self.session.get("/data/pinList", params=params)
+        return self._get("pinList", params=params)
 
 
 __all__ = ["DataClient"]

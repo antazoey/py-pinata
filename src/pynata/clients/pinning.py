@@ -1,10 +1,16 @@
 from pathlib import Path
+from typing import IO, Dict, Union
 
 from pynata.clients.base import PinataClient
 from pynata.response import PinataResponse
+from pynata.session import PinataAPISession
+from pynata.utils import json_to_dict
 
 
 class PinningClient(PinataClient):
+    def __init__(self, session: PinataAPISession):
+        super().__init__(session, "pinning")
+
     def pin_file(self, file_path: Path) -> PinataResponse:
         """
         Add and pin any file, or directory, to Pinata's IPFS nodes.
@@ -21,7 +27,39 @@ class PinningClient(PinataClient):
             if file_path.is_dir()
             else [("file", open(path, "rb")) for path in paths]
         )
-        return self.session.post("pinning/pinFileToIPFS", files=files)
+        return self._post("pinFileToIPFS", files=files)
+
+    def pin_json(self, json_arg: Union[Path, IO, Dict]) -> PinataResponse:
+        """
+        Add and pin any JSON object they wish to Pinata's IPFS nodes. This endpoint is
+        specifically optimized to only handle JSON content.
+
+        Args:
+            json_arg (pathlib.Path): Either the path to a JSON file, a python dictionary,
+              or an IO stream of an opened JSON file.
+
+        Returns:
+            :class:`~pynata.response.PinataResponse`
+        """
+        json_data = json_to_dict(json_arg)
+        data = {"pinataContent": json_data}
+        return self._post("pinJSONToIPFS", json=data)
+
+    def pin_hash(self, hash_: str) -> PinataResponse:
+        """
+        Add a hash to Pinata for asynchronous pinning. Content added through this endpoint
+        is pinned in the background and will show up in your pinned items once the content
+        has been found/pinned. **For this operation to succeed, the content for the hash you
+        provide must already be pinned by another node on the IPFS network.**
+
+        Args:
+            hash_: The hash to pin.
+
+        Returns:
+            :class:`~pynata.response.PinataResponse`
+        """
+        data = {"hashToPin": hash_}
+        return self._post("addHashToPinQueue", json=data)
 
     def unpin(self, content_hash: str) -> PinataResponse:
         """
@@ -33,8 +71,7 @@ class PinningClient(PinataClient):
         Returns:
             :class:`~pynata.response.PinataResponse`
         """
-        url = f"/pinning/unpin/{content_hash}"
-        return self.session.delete(url)
+        return self._delete(f"unpin/{content_hash}")
 
 
 __all__ = ["PinningClient"]
