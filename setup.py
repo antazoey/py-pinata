@@ -6,7 +6,7 @@ from setuptools import find_packages, setup  # type: ignore
 here = path.abspath(path.dirname(__file__))
 
 about = {}
-with open(path.join(here, "src", "pynata", "__version__.py"), encoding="utf8") as fh:
+with open(path.join(here, "src", "pinata", "__version__.py"), encoding="utf8") as fh:
     exec(fh.read(), about)
 
 with open(path.join(here, "README.md"), "r", "utf-8") as f:

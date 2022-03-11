@@ -1,18 +1,18 @@
 from pathlib import Path
 from typing import List, Optional
 
-from nft_utils import Pin, PinningAPI
+from project_nft import Pin, PinningAPI
 
-from pynata.api_key import get_key_manager
-from pynata.clients.data import DataClient
-from pynata.clients.pinning import PinningClient
-from pynata.exceptions import (
+from pinata.api_key import get_key_manager
+from pinata.clients.data import DataClient
+from pinata.clients.pinning import PinningClient
+from pinata.exceptions import (
     NoContentError,
     PinataBadRequestError,
     PinataInternalServiceError,
     PinError,
 )
-from pynata.session import PinataAPISession
+from pinata.session import PinataAPISession
 
 
 class Pinata(PinningAPI):
@@ -48,13 +48,31 @@ class Pinata(PinningAPI):
         return cls(pinning_client, data_client)
 
     def get_pins(self) -> List[Pin]:
+        """
+        Get all pins.
+
+        Returns:
+            List[``Pin``]
+        """
+
         pins = self.data.search_pins(status="pinned")["rows"]
         return [Pin(content_hash=p["ipfs_pin_hash"], file_name=p["metadata"]["name"]) for p in pins]
 
-    def get_hash(self, artwork_name: str) -> Optional[str]:
+    def get_hash(self, file_name: str) -> Optional[str]:
+        """
+        Get the hash of a pinned file by file name.
+        **NOTE**: Returns the first hash it finds for the given name.
+
+        Args:
+            file_name (str): The name of the file.
+
+        Returns:
+            Optional[str]: The content IPFS hash str.
+        """
+
         pins = self.get_pins()
         for pin in pins:
-            if pin.file_name == artwork_name:
+            if pin.file_name == file_name:
                 return pin.content_hash
 
         return None
@@ -67,7 +85,7 @@ class Pinata(PinningAPI):
             file_path (pathlib.Path): The path to the file to pin.
 
         Returns:
-            :class:`~pynata.response.PinataResponse`
+            :class:`~pinata.response.PinataResponse`
         """
 
         is_json = file_path.suffix == ".json"
@@ -89,7 +107,7 @@ class Pinata(PinningAPI):
             ignore_errors (bool): Ignore known errors.
 
         Returns:
-            :class:`~pynata.response.PinataResponse`
+            :class:`~pinata.response.PinataResponse`
         """
         try:
             self.pinning.unpin(content_hash)

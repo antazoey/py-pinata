@@ -1,5 +1,5 @@
-from pynata.response import PinataResponse
-from pynata.session import PinataAPISession
+from pinata.response import PinataResponse
+from pinata.session import PinataAPISession
 
 
 class PinataClient:

@@ -1,4 +1,4 @@
-from pynata.utils import prettify_date
+from pinata.utils import prettify_date
 
 from .conftest import (
     MOCK_FILE_NAME_1,

@@ -1,10 +1,10 @@
 import pytest
 from click.testing import CliRunner
 
-from pynata.api_key import KeyringManager
-from pynata.cli import cli
-from pynata.clients.data import DataClient
-from pynata.sdk import Pinata
+from pinata.api_key import KeyringManager
+from pinata.cli import cli
+from pinata.clients.data import DataClient
+from pinata.sdk import Pinata
 
 MOCK_FILE_NAME_1 = "MOCK_FILE_1.jpeg"
 MOCK_FILE_NAME_2 = "MOCK_FILE_2.jpeg"
@@ -33,7 +33,7 @@ def root_cli():
 def mock_keys(mocker):
     mock = mocker.MagicMock(spec=KeyringManager)
     mock.get_key_pair.return_value = (MOCK_API_KEY, MOCK_API_SECRET)
-    patch = mocker.patch("pynata.cli.get_key_manager")
+    patch = mocker.patch("pinata.cli.get_key_manager")
     patch.return_value = mock
     return mock
 
@@ -47,7 +47,7 @@ def mock_data_client(mocker):
 def mock_pinata(mocker, mock_data_client):
     mock = mocker.MagicMock(spec=Pinata)
     mock.data = mock_data_client
-    patch = mocker.patch("pynata.cli.Pinata.from_api_key")
+    patch = mocker.patch("pinata.cli.Pinata.from_api_key")
     patch.return_value = mock
     return mock
 

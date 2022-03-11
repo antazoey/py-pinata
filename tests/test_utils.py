@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from pynata.utils import json_to_dict
+from pinata.utils import json_to_dict
 
 DATA = {"test": "foobar"}
 

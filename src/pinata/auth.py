@@ -1,11 +1,8 @@
-from threading import Lock
-
 from requests.auth import AuthBase
 
 
 class PinataAuth(AuthBase):
     def __init__(self, api_key, secret):
-        self._auth_lock = Lock()
         self.__api_key = api_key
         self.__secret = secret
 

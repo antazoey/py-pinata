@@ -4,7 +4,7 @@ from typing import Dict, List, Tuple
 import click
 import keyring
 
-from pynata.exceptions import PinataMissingAPIKeyError
+from pinata.exceptions import PinataMissingAPIKeyError
 
 SERVICE_NAME = "pinata"
 PINATA_MGMT_KEY = "pinata-mgmt"

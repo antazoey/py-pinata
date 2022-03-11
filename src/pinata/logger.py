@@ -1,7 +1,7 @@
 import logging
 import sys
 
-logger = logging.getLogger("pynata")
+logger = logging.getLogger("pinata")
 logger.addHandler(logging.StreamHandler(sys.stderr))
 
 

@@ -1,6 +1,6 @@
-from pynata.api_key import set_keys_from_prompt
-from pynata.exceptions import PinataMissingAPIKeyError
-from pynata.sdk import Pinata
+from pinata.api_key import set_keys_from_prompt
+from pinata.exceptions import PinataMissingAPIKeyError
+from pinata.sdk import Pinata
 
 
 def create_pinata(profile_name: str) -> Pinata:
@@ -15,7 +15,7 @@ def create_pinata(profile_name: str) -> Pinata:
         profile_name (str): The name of the profile to get or create.
 
     Returns:
-        :class:`~pynata.sdk.Pinata`
+        :class:`~pinata.sdk.Pinata`
     """
 
     try:
